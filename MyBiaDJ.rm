@@ -1,0 +1,6 @@
+global
+        - uses external player
+        - makes playlists and plays it via external player
+        - is able to select music you like (moods)
+        - knows about using internet-radio services and podcasts
+        
