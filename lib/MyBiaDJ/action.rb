@@ -21,8 +21,7 @@ module MyBiaDJ
     end
 
     def call(*args)
-      p @params
-      @action.call(*args)
+      @action.call(*@params)
     end
 
     
@@ -50,16 +49,24 @@ module MyBiaDJ
     end
     
     def self.parse(argv = ARGV.dup)
-      cur, run = nil, []
+      cur, torun = nil, []
       argv.each_with_index do |arg, i|
         if t = @pool[arg.to_sym]
           cur = t
-          run << cur
+          torun << cur
         else
           cur << arg
         end
       end
-      MyBiaDJ::Info "Args: " + run.map{|r| [r.name, r.params]}.inspect
+      MyBiaDJ::Info "Args: " + torun.map{|r| [r.name, r.params]}.inspect
+      run(torun)
+    end
+
+
+    def self.run(actions)
+      actions.each do |action|
+        action.call
+      end
     end
     
   end

@@ -39,12 +39,21 @@ module MyBiaDJ
   def self.debug?(o = 5)
     MyBiaDJ[:debug] != 0 and MyBiaDJ[:debug] <= o
   end
+
+  def self.debug(arg, lvl)
+    "%02i > #{arg}" % lvl
+  end
+  
+  def self.Info(*args)
+    puts args.map{|a| debug(a, 3)}.join("\n")
+  end
   
 end
 
 require "config"
 require "exceptions"
 require "recordcase"
+require "action"
 
 =begin
 Local Variables:
