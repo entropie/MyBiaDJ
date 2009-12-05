@@ -28,10 +28,18 @@ module MyBiaDJ
     end
     
     def update
+      STDOUT.sync = true
       dir = old = nil
       read_dir(basedir) do |file|
+        sleep 0.5
         pfile = Pow(file)
         dir = pfile.parent.name
+        if old != dir
+          puts
+          print dir, " "
+        else
+          print "."
+        end
         old = dir
       end
     end
