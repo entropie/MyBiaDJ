@@ -33,7 +33,7 @@ module MyBiaDJ
   end
 
   def self.record_case
-    @record_case ||= RecordCase.new(MyBiaDJ[:record_case])
+    @record_case ||= RecordCase.new(MyBiaDJ[:base_dir])
   end
 
   def self.debug?(o = 5)

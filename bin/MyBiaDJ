@@ -4,4 +4,21 @@
 
 require "../lib/MyBiaDJ"
 
-p MyBiaDJ.debug?
+MyBiaDJ::Actions.setup do
+
+  on :rc, :str, :str do |opt, bar|
+    rc = MyBiaDJ::record_case
+    case opt
+    when "update"
+      rc.update
+    end
+  end
+  on :bar, :str, :str do |foo, bar|
+    puts "hello from bar #{foo} #{bar}"
+  end
+
+  
+end
+
+
+MyBiaDJ::Actions.parse

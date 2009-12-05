@@ -10,7 +10,8 @@ module MyBiaDJ
     Defaults = {
       :colors => :true,
       :debug => 5,
-      :record_case => "~/Music/tie"
+      :base_dir => "~/Music/tst",
+      :record_case => "~/MyBiaDJ"
     }
 
     def initialize(hsh = {})
