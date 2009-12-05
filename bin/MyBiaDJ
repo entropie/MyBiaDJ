@@ -13,6 +13,7 @@ MyBiaDJ::Actions.setup do
       rc.update
     end
   end
+
   on :bar, :str, :str do |foo, bar|
     puts "hello from bar #{foo} #{bar}"
   end

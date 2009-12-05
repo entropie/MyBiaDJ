@@ -11,7 +11,7 @@ module MyBiaDJ
     
     def initialize(basedir)
       @basedir = File.expand_path(basedir)
-      raise CantFindHisRecordCase, "#{@basedir} does not exist." unless
+      raise CantFindHisRecord, "#{@basedir} does not exist." unless
         File.exist?(@basedir)
     end
 
@@ -28,8 +28,11 @@ module MyBiaDJ
     end
     
     def update
+      dir = old = nil
       read_dir(basedir) do |file|
-        p Pow(file)
+        pfile = Pow(file)
+        dir = pfile.parent.name
+        old = dir
       end
     end
     

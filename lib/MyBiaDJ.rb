@@ -8,6 +8,10 @@ require "rubygems"
 require "yaml"
 
 require "pow"
+require "sqlite3"
+require "sequel"
+
+DB = Sequel.sqlite
 
 module MyBiaDJ
 
@@ -54,6 +58,8 @@ require "config"
 require "exceptions"
 require "recordcase"
 require "action"
+
+require File.join(MyBiaDJ::Source, "model", "file")
 
 =begin
 Local Variables:

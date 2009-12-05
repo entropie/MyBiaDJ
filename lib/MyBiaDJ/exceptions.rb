@@ -8,7 +8,7 @@ module MyBiaDJ
   class IsDrunk < Exception
   end
 
-  class CantFindHisRecordCase < IsDrunk
+  class CantFindHisRecord < IsDrunk
   end
   
 end
