@@ -7,7 +7,11 @@ module MyBiaDJ
 
   
   class Config < Hash
-    Defaults = {:colors => :true, :debug => 5}
+    Defaults = {
+      :colors => :true,
+      :debug => 5,
+      :record_case => "~/Music/tie"
+    }
 
     def initialize(hsh = {})
       self.update(Defaults.merge(hsh))

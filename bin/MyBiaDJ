@@ -4,5 +4,4 @@
 
 require "../lib/MyBiaDJ"
 
-p MyBiaDJ.config
-p MyBiaDJ[:debug]
+p MyBiaDJ.debug?

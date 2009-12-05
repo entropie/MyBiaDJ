@@ -31,10 +31,20 @@ module MyBiaDJ
     config unless @config
     @config[obj]
   end
+
+  def self.record_case
+    @record_case ||= RecordCase.new(MyBiaDJ[:record_case])
+  end
+
+  def self.debug?(o = 5)
+    MyBiaDJ[:debug] != 0 and MyBiaDJ[:debug] <= o
+  end
+  
 end
 
 require "config"
-
+require "exceptions"
+require "recordcase"
 
 =begin
 Local Variables:

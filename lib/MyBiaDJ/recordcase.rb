@@ -8,10 +8,11 @@ module MyBiaDJ
   class RecordCase
 
     def initialize(basedir)
-
-      raise CantFindHisRecordCase, "#{basedir} does not exist."
-      
       @basedir = File.expand_path(basedir)
+      raise CantFindHisRecordCase, "#{@basedir} does not exist." unless
+        File.exist?(@basedir)
+      
+
     end
     
   end
