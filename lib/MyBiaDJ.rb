@@ -6,6 +6,7 @@
 require "rubygems"
 
 require "yaml"
+require "pp"
 
 require "pow"
 require "sqlite3"
@@ -61,6 +62,8 @@ require "exceptions"
 require "recordcase"
 require "track"
 require "action"
+require "interface"
+require "filesystem"
 
 require File.join(MyBiaDJ::Source, "model", "file")
 

@@ -7,12 +7,22 @@ require "../lib/MyBiaDJ"
 MyBiaDJ::Actions.setup do
 
   on :rc, :str, :str do |opt, bar|
+    puts "Updateing..."
     rc = MyBiaDJ::record_case
     case opt
     when "update"
       rc.update
     end
+
+    puts "... done"
     puts
+    puts "Albums"
+    pp rc.records.map{|r| r.name}
+    puts "Genres"    
+    pp rc.records.map{|r| r.genre}
+    puts "Artists"        
+    pp rc.records.map{|r| r.artist}        
+    
   end
 
   on :bar, :str, :str do |foo, bar|
