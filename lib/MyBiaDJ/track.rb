@@ -5,37 +5,80 @@
 
 module MyBiaDJ
 
-  class Track
+  class Tracks < Array
+  end
+  
+  class Record
+    attr_reader :tracks
+    
+    def initialize(path)
+      @path, @tracks = path, Tracks.new
+    end
 
-    class Scrobble < Scrobbler::Track
-      def initialize(artist, title)
-        super
+    def name
+      albums = tracks.map{|t| t.album}.compact
+      albums.uniq.size == 1 and albums.first
+    end
+
+    def genre
+      genres = tracks.map{|t| t.genre}.compact
+      genres.uniq.size == 1 and genres.first
+    end
+
+    def artist
+      artists = tracks.map{|t| t.artist}.compact
+      if artists.uniq.size == 1
+        artists.first
+      else
+        "Compilation"
       end
     end
-    
+
+  end
+
+  class File
+
     TagFields = [:artist, :album, :genre_s, :title]
     
     attr_reader :path
 
     attr_accessor *TagFields
 
-    def initialize(path)
-      @path = path
-      tags
+    alias :genre :genre_s
+
+    class Scrobble < Scrobbler::Track
+      def initialize(artist, title)
+        super
+      end
+      alias :title :name
     end
 
-    def scrobbler
-      @scrobbler ||= Scrobble.new(artist, title)
-      #p track.tags.map{|t| [t.name,t.count]}.sort_by{|tag,tcount| tcount}.first(10)
+  end
+  
+
+  class Track < File
+
+    def initialize(path)
+      @path = path
+      set_info_from_mp3
+    end
+
+    def mp3?
+      path =~ /\.mp3$/i
     end
     
-    def tags
-      @tags ||= Mp3Info.open(path) do |mp3|
+    def scrobbler
+      if mp3?
+        @scrobbler ||= Scrobble.new(artist, title)
+      end
+    end
+    
+    def set_info_from_mp3
+      Mp3Info.open(path) do |mp3|
         TagFields.each do |field|
           send("#{field}=", mp3.tag.send(field))
         end
       end
-      p scrobbler.tags.map{|t| [t.name,t.count]}.sort_by{|tag,tcount| tcount}.first(10)
     rescue
     end
   end
