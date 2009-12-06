@@ -5,7 +5,21 @@
 
 module MyBiaDJ
 
+  # holds a directory
   class Records < Array
+
+    def artists
+      map{|r| r.artist}
+    end
+
+    def genres
+      map{|r| r.genre}
+    end
+
+    def albums
+      map{|r| r.album}
+    end
+
   end
   
   class RecordCase
@@ -19,6 +33,16 @@ module MyBiaDJ
       raise CantFindHisRecord, "#{@basedir} does not exist." unless
         ::File.exist?(@basedir)
       @records = Records.new
+    end
+
+    def stats
+      rc = @records
+      puts "Albums: "
+      pp records.albums
+      puts "Genres: "    
+      pp records.genres
+      puts "Artists: "        
+      pp records.artists
     end
 
     def quiet?

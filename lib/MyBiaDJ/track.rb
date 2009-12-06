@@ -34,6 +34,11 @@ module MyBiaDJ
       end
     end
 
+    def album
+      album = tracks.map{|t| t.album}.compact
+      album.uniq.size == 1 and album.first
+    end
+
   end
 
   class File

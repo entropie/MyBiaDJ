@@ -43,6 +43,10 @@ module MyBiaDJ
     @record_case ||= RecordCase.new(MyBiaDJ[:base_dir])
   end
 
+  def self.filesystem
+    @filesystem ||= FileSystem.new(MyBiaDJ[:record_case])
+  end
+  
   def self.debug?(o = 5)
     MyBiaDJ[:debug] != 0 and MyBiaDJ[:debug] <= o
   end
