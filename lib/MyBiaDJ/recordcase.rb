@@ -4,15 +4,21 @@
 #
 
 module MyBiaDJ
-
+  
   class RecordCase
 
     attr_reader :basedir
+    attr_accessor :quiet
     
     def initialize(basedir)
       @basedir = File.expand_path(basedir)
       raise CantFindHisRecord, "#{@basedir} does not exist." unless
         File.exist?(@basedir)
+      @tracks = []
+    end
+
+    def quiet?
+      @quiet || false
     end
 
     def read_dir(dir, &blk)
@@ -31,14 +37,16 @@ module MyBiaDJ
       STDOUT.sync = true
       dir = old = nil
       read_dir(basedir) do |file|
-        sleep 0.5
         pfile = Pow(file)
         dir = pfile.parent.name
         if old != dir
-          puts
-          print dir, " "
+          unless quiet?
+            puts
+            print dir, " "
+          end
         else
-          print "."
+          Track.new(file)
+          print "." unless quiet?
         end
         old = dir
       end

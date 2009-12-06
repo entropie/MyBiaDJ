@@ -10,6 +10,8 @@ require "yaml"
 require "pow"
 require "sqlite3"
 require "sequel"
+require "scrobbler"
+require "mp3info"
 
 DB = Sequel.sqlite
 
@@ -57,6 +59,7 @@ end
 require "config"
 require "exceptions"
 require "recordcase"
+require "track"
 require "action"
 
 require File.join(MyBiaDJ::Source, "model", "file")

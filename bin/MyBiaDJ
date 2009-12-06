@@ -12,6 +12,7 @@ MyBiaDJ::Actions.setup do
     when "update"
       rc.update
     end
+    puts
   end
 
   on :bar, :str, :str do |foo, bar|
