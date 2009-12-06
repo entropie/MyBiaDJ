@@ -9,12 +9,25 @@ module MyBiaDJ
   end
   
   class Record
-    attr_reader :tracks
-    
+    attr_reader :tracks, :path
+
     def initialize(path)
-      @path, @tracks = path, Tracks.new
+      @path, @tracks = ::File.expand_path(path), Tracks.new
     end
 
+    def tags
+      ttracks = tracks.map{|tt| tt.mp3? and tt.scrobbler.tags.map{|t| [t.name,t.count]}}
+      tags = Hash.new{|h,k| h[k] = 0}
+      ttracks.each do |track_tags|
+        if track_tags
+          track_tags.each do |tag,c|
+            tags[tag.to_sym] += c.to_i
+          end
+        end
+      end
+      tags.sort_by{|h,k| k}.reverse.first(3)
+    end
+    
     def name
       albums = tracks.map{|t| t.album}.compact
       albums.uniq.size == 1 and albums.first
@@ -76,6 +89,10 @@ module MyBiaDJ
       if mp3?
         @scrobbler ||= Scrobble.new(artist, title)
       end
+    end
+
+    def inspect
+      "#@title"
     end
     
     def set_info_from_mp3

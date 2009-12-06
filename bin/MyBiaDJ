@@ -11,11 +11,10 @@ MyBiaDJ::Actions.setup do
     case opt
     when "update"
       puts "Updating..."
-      rc.update
-      puts "... done"
+      rc.read
+      puts
     end
-    puts
-    rc.stats
+    MyBiaDJ::FileSystem.import(rc)
   end
 
   on :fs do

@@ -6,6 +6,7 @@
 require "rubygems"
 
 require "yaml"
+require "fileutils"
 require "pp"
 
 require "pow"

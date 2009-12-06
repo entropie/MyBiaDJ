@@ -61,7 +61,7 @@ module MyBiaDJ
       }
     end
     
-    def update
+    def read
       STDOUT.sync = !STDOUT.sync
       record = dir = old = nil
       read_dir(basedir) do |file|
