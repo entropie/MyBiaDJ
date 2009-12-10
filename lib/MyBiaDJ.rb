@@ -31,6 +31,11 @@ module MyBiaDJ
     "MyBiaDJ-" + Version.join(".") + (VersionSuffix and "-#{VersionSuffix}" || "")
   end
 
+  def self.Table(arg)
+    arg = arg.to_s.capitalize.to_sym
+    MyBiaDJ::Database::Tables.const_get(arg)
+  end
+  
   def self.config
     @config ||= Config.new
   end

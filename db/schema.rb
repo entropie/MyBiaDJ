@@ -2,10 +2,8 @@ Class.new(Sequel::Migration) do
   def up
     create_table(:files) do
       primary_key :id
-      Integer :parent_id
-      String :foo
-      String :bar
-      String :batz
+      String :path
+      String :name
     end
     
     create_table(:files_relations) do

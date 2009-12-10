@@ -7,8 +7,17 @@ module MyBiaDJ
 
   class Tracks < Array
   end
+
+  module FSHelper
+    def relative_path(rp = nil)
+      (rp||@path).gsub(::File.expand_path(MyBiaDJ[:base_dir]) + "/", '')
+    end
+  end
   
   class Record
+
+    include FSHelper
+    
     attr_reader :tracks, :path
 
     def initialize(path)
@@ -16,11 +25,11 @@ module MyBiaDJ
     end
 
     def save
-      # pp tracks
-      # p path #.gsub(::File.expand_path(MyBiaDJ[:base_dir]), '')
-      # puts {
-      #   :
-      # }
+      files = MyBiaDJ::Table(:files)
+      record = files.create(:path => relative_path, :name => name)
+      # tracks.each do |track|
+      #   track.save(record)
+      # end
     end
     
     def tags
@@ -41,6 +50,8 @@ module MyBiaDJ
       albums.uniq.size == 1 and albums.first
     end
 
+    alias :title :name
+    
     def genre
       genres = tracks.map{|t| t.genre}.compact
       genres.uniq.size == 1 and genres.first
@@ -71,8 +82,11 @@ module MyBiaDJ
     attr_accessor *TagFields
 
     alias :genre :genre_s
-
-    def save
+    alias :name :title
+    
+    def save(record)
+      track = MyBiaDJ::Table(:files).create(:name => name, :path => path)
+      track.add_parent(record)
     end
     
     class Scrobble < Scrobbler::Track
