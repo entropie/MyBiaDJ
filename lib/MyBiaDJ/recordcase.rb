@@ -59,7 +59,7 @@ module MyBiaDJ
           unless ::File.directory?(folder)
             yield ::File.expand_path(folder)
           else
-            read_dir(folder, &blk)
+            read_dir(folder, &blk) unless ::File.symlink?(folder)
           end
         end
       }
