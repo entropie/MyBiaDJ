@@ -10,18 +10,19 @@ MyBiaDJ::Actions.setup do
     rc = MyBiaDJ::record_case
     case opt
     when "update"
-      puts "Updating..."
+      puts "Reading #{MyBiaDJ[:base_dir]}..."
       rc.read
       puts
     end
     MyBiaDJ::FileSystem.import(rc)
+    p rc.records.map{|r| r.artist}
   end
 
   on :fs do
-    p MyBiaDJ::FileSystem::Virtual::Tags.name
-    p MyBiaDJ::FileSystem::Virtual::Tags.path    
-    p MyBiaDJ::FileSystem::Virtual::Artists.name
-    p MyBiaDJ::FileSystem::Virtual::Artists.path    
+    p MyBiaDJ::FileSystem::Virtual::Tag.name
+    p MyBiaDJ::FileSystem::Virtual::Tag.path    
+    p MyBiaDJ::FileSystem::Virtual::Artist.name
+    p MyBiaDJ::FileSystem::Virtual::Artist.path    
   end
   
   
@@ -31,6 +32,5 @@ MyBiaDJ::Actions.setup do
 
   
 end
-
 
 MyBiaDJ::Actions.parse

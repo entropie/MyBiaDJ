@@ -28,7 +28,7 @@ module MyBiaDJ
     class Virtual
 
       attr_reader :record
-      
+
       @virtuals = []
 
       def self.all
@@ -66,6 +66,7 @@ module MyBiaDJ
       def virtual_target
         "--"
       end
+
       class Artist < Virtual
         def virtual_target
           record.artist

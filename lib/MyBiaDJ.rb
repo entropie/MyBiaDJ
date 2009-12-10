@@ -15,7 +15,7 @@ require "sequel"
 require "scrobbler"
 require "mp3info"
 
-DB = Sequel.sqlite
+DB = Sequel.sqlite(File.join(File.dirname(File.dirname(File.expand_path(__FILE__))), "db.sqlite3"))
 
 module MyBiaDJ
 
@@ -69,8 +69,6 @@ require "track"
 require "action"
 require "interface"
 require "filesystem"
-
-require File.join(MyBiaDJ::Source, "model", "file")
 
 =begin
 Local Variables:

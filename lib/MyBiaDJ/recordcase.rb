@@ -35,6 +35,10 @@ module MyBiaDJ
       @records = Records.new
     end
 
+    def size
+      records.size
+    end
+    
     def stats
       rc = @records
       puts "Albums: "
