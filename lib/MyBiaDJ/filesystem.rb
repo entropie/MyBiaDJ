@@ -9,6 +9,7 @@ module MyBiaDJ
 
     def self.import(recordcase)
       recordcase.records.each do |record|
+        record.save
         virtual = select_virtual_for(record)
       end
     end

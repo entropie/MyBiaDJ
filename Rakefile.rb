@@ -16,7 +16,15 @@ Sequel.extension :schema_dumper
 # end
 
 task :lala do
-  p DB.tables
+  f = MyBiaDJ::Database::Tables::Files
+  a = f.create
+  b = f.create
+
+  a.add_parent(b)
+
+  p a
+  p a.parent
+
 end
 
 

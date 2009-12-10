@@ -9,6 +9,7 @@ module MyBiaDJ
     def up
       create_table :foo do
         primary_key       :id
+        String            :bar
       end
     end
 

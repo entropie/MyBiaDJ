@@ -64,11 +64,16 @@ end
 
 require "config"
 require "exceptions"
+require "database"
 require "recordcase"
 require "track"
 require "action"
 require "interface"
 require "filesystem"
+
+require "#{MyBiaDJ::Source}/model/files"
+
+
 
 =begin
 Local Variables:

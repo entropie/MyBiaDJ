@@ -15,7 +15,6 @@ MyBiaDJ::Actions.setup do
       puts
     end
     MyBiaDJ::FileSystem.import(rc)
-    p rc.records.map{|r| r.artist}
   end
 
   on :fs do

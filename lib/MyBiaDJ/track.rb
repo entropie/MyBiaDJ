@@ -15,6 +15,13 @@ module MyBiaDJ
       @path, @tracks = ::File.expand_path(path), Tracks.new
     end
 
+    def save
+      p path #.gsub(::File.expand_path(MyBiaDJ[:base_dir]), '')
+      # puts {
+      #   :
+      # }
+    end
+    
     def tags
       ttracks = tracks.map{|tt| tt.mp3? and tt.scrobbler.tags.map{|t| [t.name,t.count]}}
       tags = Hash.new{|h,k| h[k] = 0}
@@ -64,6 +71,9 @@ module MyBiaDJ
 
     alias :genre :genre_s
 
+    def save
+    end
+    
     class Scrobble < Scrobbler::Track
       def initialize(artist, title)
         super

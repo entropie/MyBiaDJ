@@ -7,6 +7,8 @@ module MyBiaDJ::Database::Tables
 
   class Files < Sequel::Model
 
+    many_to_many :parent, :class => Files, :join_table => :files_relations
+    
   end
 
 end

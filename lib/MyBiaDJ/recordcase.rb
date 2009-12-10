@@ -69,8 +69,7 @@ module MyBiaDJ
       STDOUT.sync = !STDOUT.sync
       record = dir = old = nil
       read_dir(basedir) do |file|
-        pfile = Pow(file)
-        dir = pfile.parent.name
+        dir = ::File.dirname(file)
         if old != dir
           record = Record.new(dir)
           @records << record
@@ -78,11 +77,11 @@ module MyBiaDJ
             puts
             print " >>> ", dir, " "
           end
+          old = dir
         else
-          record.tracks << Track.new(file)
           print "." unless quiet?
         end
-        old = dir
+        record.tracks << Track.new(file)
       end
       STDOUT.sync = !STDOUT.sync      
     end
