@@ -73,8 +73,6 @@ require "filesystem"
 
 require "#{MyBiaDJ::Source}/model/files"
 
-
-
 =begin
 Local Variables:
   mode:ruby

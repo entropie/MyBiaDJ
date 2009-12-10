@@ -27,6 +27,18 @@ task :lala do
 
 end
 
+task :lsdb do
+  f = MyBiaDJ::Database::Tables::Files
+  f.each do |file|
+    if file.parent.respond_to?(:name)
+      puts "     > #{file.parent.name} -> #{file.name}"
+    else
+      puts "  -> #{file.name}"
+    end
+  end
+end
+
+
 
 
 =begin

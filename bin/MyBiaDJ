@@ -8,6 +8,7 @@ MyBiaDJ::Actions.setup do
 
   on :rc, :str, :str do |opt, bar|
     rc = MyBiaDJ::record_case
+    p MyBiaDJ[:base_dir]
     case opt
     when "update"
       puts "Reading #{MyBiaDJ[:base_dir]}..."

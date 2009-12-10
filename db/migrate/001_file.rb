@@ -10,10 +10,8 @@ module MyBiaDJ
       create_table :files do
         primary_key       :id
 
-        foreign_key       :parent_id
-        String       :foo
-        String       :bar
-        String       :batz        
+        String       :path
+        String       :name
       end
 
       create_table :files_relations do
