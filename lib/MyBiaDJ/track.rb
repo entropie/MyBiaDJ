@@ -16,7 +16,8 @@ module MyBiaDJ
     end
 
     def save
-      p path #.gsub(::File.expand_path(MyBiaDJ[:base_dir]), '')
+      # pp tracks
+      # p path #.gsub(::File.expand_path(MyBiaDJ[:base_dir]), '')
       # puts {
       #   :
       # }

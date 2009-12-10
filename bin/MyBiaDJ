@@ -13,8 +13,10 @@ MyBiaDJ::Actions.setup do
       puts "Reading #{MyBiaDJ[:base_dir]}..."
       rc.read
       puts
+      puts "",""
+      puts "Importing..."
+      MyBiaDJ::FileSystem.import(rc)
     end
-    MyBiaDJ::FileSystem.import(rc)
   end
 
   on :fs do
