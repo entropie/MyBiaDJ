@@ -7,6 +7,10 @@ module MyBiaDJ
 
   class FileSystem
 
+    # imports the entire record-case.
+    #
+    # this is done by iterating each record, saves the record to the database,
+    # iterating each record child and save again. then virtual_for(record) links virtual paths.
     def self.import(recordcase)
       setup_virtuals
       recordcase.records.each do |record|
@@ -17,19 +21,21 @@ module MyBiaDJ
       end
     end
 
+    # creates top level directories for virtual
     def self.setup_virtuals
       Virtual.all.map { |v| v.name}.each do |v|
         vpath = ::File.join(::File.expand_path(MyBiaDJ[:record_case]), v.to_s)
         FileUtils.mkdir_p(vpath)
        end
     end
-    
+
+    # links childs and record it to database
     def self.virtual_for(record)
       Virtual.all.each do |virt|
         virt = virt.new(record)
         results = [ virt.link! ].flatten
         virt.connect!
-        yield virt
+        yield virt if block_given?
       end
     end
     
@@ -40,30 +46,37 @@ module MyBiaDJ
 
       @virtuals = []
 
+      # connects record to virtual (self)
       def connect!
         record.connect_to(self)
       end
 
+      # returns sanitized value
       def value(str)
         sanitize(str)
       end
-      
+
+      # finds/creates virtual entry and yields each record
       def db_record
         vals = [value].flatten
-        vals.each do |v|
+        vals.map do |v|
           record = MyBiaDJ::Table(:virtual).find_or_create(:name => name.to_s, :value => v)
-          yield record
+          yield record if block_given?
+          record
         end
       end
       
       def root
         ::File.expand_path(MyBiaDJ[:record_case])        
       end
-      
+      private :root
+
+      # returns all virtuals
       def self.all
         @virtuals
       end
-      
+
+      # virtual name
       def self.name
         self.to_s.split("::").last.downcase.to_sym
       end
@@ -71,7 +84,8 @@ module MyBiaDJ
       def name
         self.class.name
       end
-      
+
+      # virtual toplevel path
       def self.path
         ::File.expand_path(::File.join(MyBiaDJ[:record_case], name.to_s))
       end
@@ -90,17 +104,18 @@ module MyBiaDJ
         else
           str.map{|s| s.downcase}
         end
-        
       end
       
       def sanitized_virtual_target
         sanitize(virtual_target)
       end
 
+      # returns target for symlink
       def link_target(target = nil)
-        ::File.join(self.class.path, sanitized_virtual_target) #, target || record.name)
+        ::File.join(self.class.path, sanitized_virtual_target)
       end
-      
+
+      # links
       def link!(target = nil)
         tar = (target or link_target)
         FileUtils.ln_s(record.path, tar, :verbose => MyBiaDJ.debug?)
@@ -111,10 +126,10 @@ module MyBiaDJ
       end
 
       class Artist < Virtual
+
         def value
           super(record.artist)
         end
-        
 
         def link_target(target = nil)
           artist_path = ::File.join(self.class.path, sanitize(record.artist))
