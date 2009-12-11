@@ -120,6 +120,7 @@ module MyBiaDJ
         tar = (target or link_target)
         FileUtils.ln_s(record.path, tar, :verbose => MyBiaDJ.debug?)
       rescue
+        p $!
         MyBiaDJ::Error("Virtual:Link:#{name.to_s.capitalize.underline}: skipping #{virtual_target}")
       end
 
@@ -137,7 +138,7 @@ module MyBiaDJ
     end
   end
 
-  [:genre, :album, :tag, :artist].each do |l|
+  [:direct, :genre, :album, :tag, :artist].each do |l|
     require "#{MyBiaDJ::Source}/lib/MyBiaDJ/virtuals/#{l}"
   end
 end

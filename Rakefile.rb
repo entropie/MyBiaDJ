@@ -28,9 +28,8 @@ task :lala do
 end
 
 task :lili do
-  f = MyBiaDJ::Database::Tables::Virtual.find(:name => "genre", :value => "soundtrack")
-  p f.name
-  p f.files
+  f = MyBiaDJ::Database::Tables::Files[10]
+  pp f.to_record
 end
 
 task :lsdb do

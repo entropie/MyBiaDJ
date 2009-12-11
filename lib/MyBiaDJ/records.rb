@@ -32,6 +32,16 @@ module MyBiaDJ
     
     attr_reader :tracks, :path
 
+    attr_accessor :db
+
+    def read_from_db
+      return unless db
+      FSHelper.read_dir(path) do |file|
+        tracks << Track.new(file)
+      end
+      db
+    end
+    
     def initialize(path)
       @path, @tracks = ::File.expand_path(path), Tracks.new
     end
@@ -58,8 +68,8 @@ module MyBiaDJ
       end
       tags.sort_by{|h,k| k}.reverse.first(3)
     rescue
-      MyBiaDJ::Error("Virtual:Record:Tags: no infos from remote for #{path}")
-      []
+      MyBiaDJ::Error("Virtual:Record:#{"Tags".underline}: no infos from remote for #{path}")
+      [[:untagged, 100]]
     end
 
     # returns album name
@@ -96,7 +106,7 @@ module MyBiaDJ
 
     # db row of record
     def db_record
-      MyBiaDJ::Table(:files)[:path => relative_path, :name => name.to_s]
+      db or MyBiaDJ::Table(:files)[:path => relative_path, :name => name.to_s]
     end
     
     def connect_to(virtual)

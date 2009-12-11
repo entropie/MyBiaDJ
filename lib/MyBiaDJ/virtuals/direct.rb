@@ -13,7 +13,6 @@ class MyBiaDJ::FileSystem
 
       def link_target(target = nil)
         direct_path = ::File.join(self.class.path, ::File.basename(record.path))
-        FileUtils.mkdir_p(direct_path)
         direct_path
       end
       
