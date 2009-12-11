@@ -5,16 +5,17 @@
 
 module MyBiaDJ
 
-  class Tracks < Array
-  end
-
   module FSHelper
     def relative_path(rp = nil)
       (rp||@path).gsub(::File.expand_path(MyBiaDJ[:base_dir]) + "/", '')
     end
   end
-  
+
+  # Record reflects an album/directory
   class Record
+
+    class Tracks < Array
+    end
 
     include FSHelper
     
@@ -24,6 +25,7 @@ module MyBiaDJ
       @path, @tracks = ::File.expand_path(path), Tracks.new
     end
 
+    # saves entire record and childs
     def save
       files = MyBiaDJ::Table(:files)
       record = files.create(:path => relative_path, :name => name)
@@ -32,6 +34,7 @@ module MyBiaDJ
       end
     end
 
+    # returns tags from last.fm via scrobbler
     def tags
       ttracks = tracks.map{|tt| tt.mp3? and tt.scrobbler.tags.map{|t| [t.name,t.count]}}
       tags = Hash.new{|h,k| h[k] = 0}
@@ -44,23 +47,30 @@ module MyBiaDJ
       end
       tags.sort_by{|h,k| k}.reverse.first(3)
     end
-    
+
+    # returns album name
+    # TODO:
     def name
       albums = tracks.map{|t| t.album}.compact
       albums.uniq.size == 1 and albums.first
     end
 
+    alias :album :name
     alias :title :name
 
     def size
       tracks.size
     end
-    
+
+    # returns album genre
+    # TODO:
     def genre
       genres = tracks.map{|t| t.genre}.compact
       genres.uniq.size == 1 and genres.first
     end
 
+    # returns album artist or "Compilation" if there are more than one
+    # TODO:
     def artist
       artists = tracks.map{|t| t.artist}.compact
       if artists.uniq.size == 1
@@ -70,11 +80,7 @@ module MyBiaDJ
       end
     end
 
-    def album
-      album = tracks.map{|t| t.album}.compact
-      album.uniq.size == 1 and album.first
-    end
-
+    # db row of record
     def db_record
       MyBiaDJ::Table(:files)[:path => relative_path, :name => name.to_s]
     end
@@ -87,6 +93,7 @@ module MyBiaDJ
     
   end
 
+  # parent class for every file
   class File
 
     include FSHelper
@@ -101,9 +108,10 @@ module MyBiaDJ
     alias :name :title
 
     def db_record
-      MyBiaDJ::Table(:files)[:name => name, :path => relative_path]
+      MyBiaDJ::Table(:files)[:name => name.to_s, :path => relative_path]
     end
-    
+
+    # saves track to database and connect it to record
     def save(record)
       track = MyBiaDJ::Table(:files).create(:name => name, :path => relative_path)
       track.add_parent(record)
@@ -120,10 +128,12 @@ module MyBiaDJ
       end
       alias :title :name
     end
-
   end
   
 
+  # track represents a playable file object
+  #
+  # only mp3s for now
   class Track < File
 
     def initialize(path)
@@ -144,7 +154,8 @@ module MyBiaDJ
     def inspect
       "#@title"
     end
-    
+
+    # get infos from mp3tags and add as instance_variables
     def set_info_from_mp3
       Mp3Info.open(path) do |mp3|
         TagFields.each do |field|
