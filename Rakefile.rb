@@ -41,7 +41,6 @@ task :lsdb do
     else
       puts "  -> #{file.name.underline}"
     end
-    puts file.db_record
   end
 end
 

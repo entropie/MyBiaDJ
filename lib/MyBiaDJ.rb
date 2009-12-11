@@ -78,7 +78,7 @@ require "recordcase"
 require "track"
 require "action"
 require "interface"
-require "filesystem"
+require "virtuals"
 
 require "#{MyBiaDJ::Source}/model/files"
 require "#{MyBiaDJ::Source}/model/virtual"

@@ -124,74 +124,10 @@ module MyBiaDJ
       def virtual_target
         record.name
       end
-
-      class Artist < Virtual
-
-        def value
-          super(record.artist)
-        end
-
-        def link_target(target = nil)
-          artist_path = ::File.join(self.class.path, sanitize(record.artist))
-          FileUtils.mkdir_p(artist_path)
-          ::File.join(artist_path, sanitize(record.name))
-        end
-        
-      end
-
-      class Album < Virtual
-
-        def value
-          super(record.album)
-        end
-        
-        def link_target(target = nil)
-          album_path = ::File.join(self.class.path)
-          FileUtils.mkdir_p(album_path)
-          ::File.join(album_path, virtual_target)
-        end
-
-        def virtual_target
-          sanitize(record.name)
-        end
-      end
-
-      class Genre < Virtual
-
-        def value
-          super(record.genre)
-        end
-        
-        def link_target
-          genre_path = ::File.join(root, self.class.name.to_s, sanitize(record.genre))
-          FileUtils.mkdir_p(genre_path)
-          ::File.join(genre_path, sanitize(record.name))
-        end
-      end
-      
-      class Tag < Virtual
-
-        def value
-          super(record.tags.map{|t, i| t.to_s})
-        end
-
-        def link_target
-          record.tags.map do |tag, count|          
-            ::File.join(root, self.class.name.to_s, tag.to_s, sanitized_virtual_target)
-          end
-        end
-
-        def link!
-          link_target.each do |tagdir|
-            FileUtils.mkdir_p(::File.dirname(tagdir))
-            FileUtils.ln_s(record.path, tagdir, :verbose => MyBiaDJ.debug?)
-          end
-        end
-        
-      end
-      
+ 
     end
-
+    
+ 
     attr_reader :record_case
     
     def initialize(path)
@@ -199,6 +135,9 @@ module MyBiaDJ
     end
   end
 
+  [:genre, :album, :tag, :artist].each do |l|
+    require "#{MyBiaDJ::Source}/lib/MyBiaDJ/virtuals/#{l}"
+  end
 end
 
 
