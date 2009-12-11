@@ -119,6 +119,8 @@ module MyBiaDJ
       def link!(target = nil)
         tar = (target or link_target)
         FileUtils.ln_s(record.path, tar, :verbose => MyBiaDJ.debug?)
+      rescue
+        MyBiaDJ::Error("Virtual:Link:#{name.to_s.capitalize.underline}: skipping #{virtual_target}")
       end
 
       def virtual_target

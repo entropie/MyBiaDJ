@@ -68,6 +68,9 @@ module MyBiaDJ
   def self.Info(*args)
     puts args.map{|a| debug(a, 3)}.join("\n")
   end
+  def self.Error(*args)
+    puts args.map{|a| debug(a, 1).foreground(:red)}.join("\n")
+  end
   
 end
 

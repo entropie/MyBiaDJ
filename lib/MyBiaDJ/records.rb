@@ -4,7 +4,8 @@
 #
 
 module MyBiaDJ
-  # holds a directory
+
+  # holds all the records
   class Records < Array
 
     def artists
@@ -56,6 +57,9 @@ module MyBiaDJ
         end
       end
       tags.sort_by{|h,k| k}.reverse.first(3)
+    rescue
+      MyBiaDJ::Error("Virtual:Record:Tags: no infos from remote for #{path}")
+      []
     end
 
     # returns album name
@@ -99,6 +103,8 @@ module MyBiaDJ
       virtual.db_record do |virt|
         db_record.add_virtual(virt)
       end
+    rescue
+      MyBiaDJ::Error("Virtual:DB:#{virtual.name.to_s.capitalize.underline}: no information found on #{name}")
     end
     
   end
