@@ -33,7 +33,7 @@ module MyBiaDJ
     def self.virtual_for(record)
       Virtual.all.each do |virt|
         virt = virt.new(record)
-        results = [ virt.link! ].flatten
+        virt.link!
         virt.connect!
         yield virt if block_given?
       end

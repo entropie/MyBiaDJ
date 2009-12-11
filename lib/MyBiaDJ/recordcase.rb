@@ -5,23 +5,6 @@
 
 module MyBiaDJ
 
-  # holds a directory
-  class Records < Array
-
-    def artists
-      map{|r| r.artist}
-    end
-
-    def genres
-      map{|r| r.genre}
-    end
-
-    def albums
-      map{|r| r.album}
-    end
-
-  end
-  
   # recordcase is the entire music collection
   class RecordCase
 

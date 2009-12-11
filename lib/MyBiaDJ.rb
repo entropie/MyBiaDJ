@@ -72,9 +72,11 @@ module MyBiaDJ
 end
 
 require "config"
+require "helper"
 require "exceptions"
 require "database"
 require "recordcase"
+require "records"
 require "track"
 require "action"
 require "interface"
