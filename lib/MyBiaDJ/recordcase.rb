@@ -22,6 +22,7 @@ module MyBiaDJ
 
   end
   
+  # recordcase is the entire music collection
   class RecordCase
 
     attr_reader :basedir
@@ -53,6 +54,7 @@ module MyBiaDJ
       @quiet || false
     end
 
+    # reads a directory recursively and returns each child with expanded_path
     def read_dir(dir, &blk)
       Dir.chdir(dir){
         Dir["*"].each do |folder|
@@ -64,7 +66,8 @@ module MyBiaDJ
         end
       }
     end
-    
+
+    # reads basedir and collects all records/tracks
     def read
       STDOUT.sync = !STDOUT.sync
       record = dir = old = nil
