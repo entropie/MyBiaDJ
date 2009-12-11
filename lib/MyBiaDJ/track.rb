@@ -27,11 +27,11 @@ module MyBiaDJ
     def save
       files = MyBiaDJ::Table(:files)
       record = files.create(:path => relative_path, :name => name)
-      # tracks.each do |track|
-      #   track.save(record)
-      # end
+      tracks.each do |track|
+        track.save(record) if track.mp3?
+      end
     end
-    
+
     def tags
       ttracks = tracks.map{|tt| tt.mp3? and tt.scrobbler.tags.map{|t| [t.name,t.count]}}
       tags = Hash.new{|h,k| h[k] = 0}
@@ -51,6 +51,10 @@ module MyBiaDJ
     end
 
     alias :title :name
+
+    def size
+      tracks.size
+    end
     
     def genre
       genres = tracks.map{|t| t.genre}.compact
@@ -71,10 +75,22 @@ module MyBiaDJ
       album.uniq.size == 1 and album.first
     end
 
+    def db_record
+      MyBiaDJ::Table(:files)[:path => relative_path, :name => name.to_s]
+    end
+    
+    def connect_to(virtual)
+      virtual.db_record do |virt|
+        db_record.add_virtual(virt)
+      end
+    end
+    
   end
 
   class File
 
+    include FSHelper
+    
     TagFields = [:artist, :album, :genre_s, :title]
     
     attr_reader :path
@@ -83,10 +99,19 @@ module MyBiaDJ
 
     alias :genre :genre_s
     alias :name :title
+
+    def db_record
+      MyBiaDJ::Table(:files)[:name => name, :path => relative_path]
+    end
     
     def save(record)
-      track = MyBiaDJ::Table(:files).create(:name => name, :path => path)
+      track = MyBiaDJ::Table(:files).create(:name => name, :path => relative_path)
       track.add_parent(record)
+      track
+    end
+
+    def title
+      @title
     end
     
     class Scrobble < Scrobbler::Track

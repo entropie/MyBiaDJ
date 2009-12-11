@@ -27,14 +27,21 @@ task :lala do
 
 end
 
+task :lili do
+  f = MyBiaDJ::Database::Tables::Virtual.find(:name => "genre", :value => "soundtrack")
+  p f.name
+  p f.files
+end
+
 task :lsdb do
   f = MyBiaDJ::Database::Tables::Files
   f.each do |file|
     if file.parent.respond_to?(:name)
-      puts "     > #{file.parent.name} -> #{file.name}"
+      puts "     > " + "#{file.parent.name} -> #{file.name}".foreground(:cyan)
     else
-      puts "  -> #{file.name}"
+      puts "  -> #{file.name.underline}"
     end
+    puts file.db_record
   end
 end
 

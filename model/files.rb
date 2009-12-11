@@ -9,6 +9,8 @@ module MyBiaDJ::Database::Tables
 
     many_to_many :parent, :class => Files, :join_table => :files_relations
 
+    many_to_many  :virtual, :join_table => :files_virtuals
+    
     def parent
       par = super
       return par.kind_of?(Array) ? par.first : nil

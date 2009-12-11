@@ -13,14 +13,18 @@ require "pow"
 require "sqlite3"
 require "sequel"
 require "scrobbler"
+
 require "mp3info"
+require "rainbow"
 
 DB = Sequel.sqlite(File.join(File.dirname(File.dirname(File.expand_path(__FILE__))), "db.sqlite3"))
+#                   :logger => [Logger.new($stdout)])
 
 module MyBiaDJ
 
   Source = File.dirname(File.dirname(File.expand_path(__FILE__)))
 
+  
   $:.unshift File.join(Source, "lib", "MyBiaDJ")
   
   Version = %w[0 1 0]
@@ -77,6 +81,7 @@ require "interface"
 require "filesystem"
 
 require "#{MyBiaDJ::Source}/model/files"
+require "#{MyBiaDJ::Source}/model/virtual"
 
 =begin
 Local Variables:

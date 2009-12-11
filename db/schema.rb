@@ -11,17 +11,23 @@ Class.new(Sequel::Migration) do
       Integer :files_id
     end
     
-    create_table(:foo) do
-      primary_key :id
-      String :bar
+    create_table(:files_virtuals) do
+      Integer :files_id
+      Integer :virtual_id
     end
     
     create_table(:schema_info) do
       Integer :version
     end
+    
+    create_table(:virtuals) do
+      primary_key :id
+      String :name
+      String :value
+    end
   end
   
   def down
-    drop_table(:files, :files_relations, :foo, :schema_info)
+    drop_table(:files, :files_relations, :files_virtuals, :schema_info, :virtuals)
   end
 end
