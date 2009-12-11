@@ -22,6 +22,10 @@ module MyBiaDJ
     def size
       records.size
     end
+
+    def import!
+      MyBiaDJ::FileSystem.import(self)
+    end
     
     def stats
       rc = @records
