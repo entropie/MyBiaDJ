@@ -46,7 +46,9 @@ module MyBiaDJ
 
   def self.[](obj)
     config unless @config
-    @config[obj]
+    ret = @config[obj]
+    ret = ::File.expand_path(ret) if ret[0] == ?~
+    ret
   end
 
   def self.record_case
