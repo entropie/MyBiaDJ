@@ -8,6 +8,8 @@ module MyBiaDJ
   # recordcase is the entire music collection
   class RecordCase
 
+    include FSHelper
+    
     attr_reader :basedir
     attr_accessor :quiet
     attr_accessor :records
@@ -23,6 +25,7 @@ module MyBiaDJ
       records.size
     end
 
+    # starts import process from filesystem
     def import!
       MyBiaDJ::FileSystem.import(self)
     end
@@ -41,24 +44,11 @@ module MyBiaDJ
       @quiet || false
     end
 
-    # reads a directory recursively and returns each child with expanded_path
-    def read_dir(dir, &blk)
-      Dir.chdir(dir){
-        Dir["*"].each do |folder|
-          unless ::File.directory?(folder)
-            yield ::File.expand_path(folder)
-          else
-            read_dir(folder, &blk) unless ::File.symlink?(folder)
-          end
-        end
-      }
-    end
-
-    # reads basedir and collects all records/tracks
-    def read
+    # reads +tdir+ or +basedir+ and collects all records/tracks
+    def read(tdir = nil)
       STDOUT.sync = !STDOUT.sync
       record = dir = old = nil
-      read_dir(basedir) do |file|
+      read_dir(tdir || basedir) do |file|
         dir = ::File.dirname(file)
         if old != dir
           record = Record.new(dir)
