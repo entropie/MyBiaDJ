@@ -32,6 +32,25 @@ task :lili do
   pp f.to_record
 end
 
+class PrintChange < FSEvent
+  def on_change(directories)
+    puts "Detected change in: #{directories}"
+  end
+  
+  def start
+    puts "watching #{registered_directories.join(", ")} for changes"
+    super
+  end
+end
+
+task :t do
+  printer = PrintChange.new
+  printer.latency = 0.2
+  printer.watch_directories [MyBiaDJ[:record_case]]
+  printer.start
+end
+
+
 task :lsdb do
   f = MyBiaDJ::Database::Tables::Files
   f.each do |file|
