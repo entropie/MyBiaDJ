@@ -27,29 +27,22 @@ task :lala do
 
 end
 
+task :fuse do
+  mirror = MyBiaDJ::FileSystem::Fuse.new
+end
+
+
+task :virtus do
+  f = MyBiaDJ::Database::Tables::Virtual
+  f.filter(:name => "album").each do |r|
+    p r.files
+  end
+end
+
 task :lili do
   f = MyBiaDJ::Database::Tables::Files[10]
   pp f.to_record
 end
-
-class PrintChange < FSEvent
-  def on_change(directories)
-    puts "Detected change in: #{directories}"
-  end
-  
-  def start
-    puts "watching #{registered_directories.join(", ")} for changes"
-    super
-  end
-end
-
-task :t do
-  printer = PrintChange.new
-  printer.latency = 0.2
-  printer.watch_directories [MyBiaDJ[:record_case]]
-  printer.start
-end
-
 
 task :lsdb do
   f = MyBiaDJ::Database::Tables::Files

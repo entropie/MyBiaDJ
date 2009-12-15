@@ -16,10 +16,10 @@ require "scrobbler"
 
 require "mp3info"
 require "rainbow"
-require "fsevent"
+require "fusefs"
 
-DB = Sequel.sqlite(File.join(File.dirname(File.dirname(File.expand_path(__FILE__))), "db.sqlite3"))
-#                   :logger => [Logger.new($stdout)])
+DB = Sequel.sqlite(File.join(File.dirname(File.dirname(File.expand_path(__FILE__))), "db.sqlite3"),
+                   :logger => [Logger.new($stdout)])
 
 module MyBiaDJ
 
@@ -71,8 +71,13 @@ module MyBiaDJ
   def self.Info(*args)
     puts args.map{|a| debug(a, 3)}.join("\n")
   end
+
   def self.Error(*args)
     puts args.map{|a| debug(a, 1).foreground(:red)}.join("\n")
+  end
+
+  def self.Debug(*args)
+    puts args.map{|a| debug(a, 6).foreground(:white)}.join("\n")
   end
   
 end
@@ -87,6 +92,7 @@ require "track"
 require "action"
 require "interface"
 require "virtuals"
+require "filesystem"
 
 require "#{MyBiaDJ::Source}/model/files"
 require "#{MyBiaDJ::Source}/model/virtual"

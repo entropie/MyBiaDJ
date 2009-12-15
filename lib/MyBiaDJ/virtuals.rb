@@ -26,7 +26,7 @@ module MyBiaDJ
       Virtual.all.map { |v| v.name}.each do |v|
         vpath = ::File.join(::File.expand_path(MyBiaDJ[:record_case]), v.to_s)
         FileUtils.mkdir_p(vpath)
-       end
+      end
     end
 
     # links childs and record it to database
@@ -46,6 +46,39 @@ module MyBiaDJ
 
       @virtuals = []
 
+      def self.db
+        @db ||= Hash.new{|h,k| h[k] = {}}
+      end
+
+      def self.files(arr)
+        db[name][arr]
+      end
+      
+      def self.get_content
+        target = MyBiaDJ::Table(:virtual)
+        cnts = target.filter(:name => name.to_s)
+      end
+      
+      def self.contents(path)
+        cnts = get_content
+        if path.empty?
+          return cnts.map{|r| r.value}
+        else
+          cnts.filter(:value => path.first).each do |row|
+            db[name][path.join("/")] = row.files.first.to_record.tracks.map{|t| t.name}
+            return db[name][path.join("/")]
+          end
+        end
+      end
+
+      # FIXME: works only if path is two paired (dir/path)
+      def self.directory?(path)
+        return false if path.last =~ /^\./
+        return true if path.size == 1
+        false if files(path.first).include?(path.last)
+      end
+
+      
       # connects record to virtual (self)
       def connect!
         record.connect_to(self)
@@ -127,10 +160,10 @@ module MyBiaDJ
       def virtual_target
         record.name
       end
- 
+      
     end
     
- 
+    
     attr_reader :record_case
     
     def initialize(path)

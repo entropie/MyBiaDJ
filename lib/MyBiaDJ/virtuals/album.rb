@@ -19,6 +19,7 @@ class MyBiaDJ::FileSystem
       def virtual_target
         sanitize(record.name)
       end
+
     end
   end
 end
