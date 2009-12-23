@@ -77,7 +77,6 @@ module MyBiaDJ
         return true if path.size == 1
         false if files(path.first).include?(path.last)
       end
-
       
       # connects record to virtual (self)
       def connect!
@@ -100,7 +99,7 @@ module MyBiaDJ
       end
       
       def root
-        ::File.expand_path(MyBiaDJ[:record_case])        
+        ::File.expand_path(MyBiaDJ[:record_case])
       end
       private :root
 
@@ -171,7 +170,10 @@ module MyBiaDJ
     end
   end
 
-  [:direct, :genre, :album, :tag, :artist].each do |l|
+  # [:direct, :genre, :album, :tag, :artist].each do |l|
+  #   require "#{MyBiaDJ::Source}/lib/MyBiaDJ/virtuals/#{l}"
+  # end
+  [:direct].each do |l|
     require "#{MyBiaDJ::Source}/lib/MyBiaDJ/virtuals/#{l}"
   end
 end

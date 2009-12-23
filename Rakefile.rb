@@ -10,11 +10,6 @@ load "tasks/database.rake"
 Sequel.extension :migration
 Sequel.extension :schema_dumper
 
-# task :migrate do
-#   migrator = Sequel::Migrator.apply(DB, File.join(MyBiaDJ::Source, "model"))
-#   puts DB.dump_schema_migration
-# end
-
 task :lala do
   f = MyBiaDJ::Database::Tables::Files
   a = f.create
@@ -35,7 +30,8 @@ end
 task :virtus do
   f = MyBiaDJ::Database::Tables::Virtual
   f.filter(:name => "album").each do |r|
-    p r.files
+    p r
+    #p r.files
   end
 end
 

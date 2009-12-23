@@ -11,7 +11,7 @@ module MyBiaDJ
       :colors => :true,
       :debug => 5,
       :base_dir => "~/Music/tst",
-      :record_case => "~/MyBiaDJ"
+      :record_case => "~/MyBiaDJFuse"
     }
 
     def initialize(hsh = {})

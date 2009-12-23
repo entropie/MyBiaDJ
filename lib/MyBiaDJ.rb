@@ -18,8 +18,9 @@ require "mp3info"
 require "rainbow"
 require "fusefs"
 
-DB = Sequel.sqlite(File.join(File.dirname(File.dirname(File.expand_path(__FILE__))), "db.sqlite3"),
-                   :logger => [Logger.new($stdout)])
+DB = Sequel.sqlite(File.
+  join(File.dirname(File.dirname(File.expand_path(__FILE__))), "db.sqlite3"))
+#                   :logger => [Logger.new($stdout)])
 
 module MyBiaDJ
 

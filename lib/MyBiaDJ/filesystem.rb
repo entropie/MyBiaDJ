@@ -9,13 +9,12 @@ module MyBiaDJ
 
     class Mirror
       attr_reader :path
-      
     end
 
     class Fuse < Mirror
 
       def initialize
-        @path = ::File.expand_path("~/MyBiadDJFuse")
+        @path = ::File.expand_path("~/MyBiaDJFuse")
         FileUtils.mkdir_p(path)
         virtual_dispatcher = VirtualDispatcher.new
         FuseFS.set_root(virtual_dispatcher)
@@ -44,13 +43,36 @@ module MyBiaDJ
       end
       
       def dispatch_path(path)
-        virtual_path, *rest = scan_path(path)
-        virtual = select_virtual_for(virtual_path)
+        virtual, rest = get_virtual_and_arguments(path)
         virtual.contents(rest)
       rescue
         p $!
       end
 
+      def get_virtual_and_arguments(path)
+        virtual_path, *rest = scan_path(path)
+        virtual = select_virtual_for(virtual_path)
+        [virtual, rest]
+      end
+      
+      def size(path)
+        virtual_path, *rest = scan_path(path)
+        virtual = select_virtual_for(virtual_path)
+        virtual.size(rest)
+      end
+
+      def file?(path)
+        virtual_path, *rest = scan_path(path)
+        virtual = select_virtual_for(virtual_path)
+        virtual.file?(rest)
+      end
+
+      def read_file(path)
+        virtual_path, *rest = scan_path(path)
+        virtual = select_virtual_for(virtual_path)
+        virtual.read_file(rest)
+      end
+      
       def contents(path)
         MyBiaDJ::Debug("fuse>contents: %s " % path)
         case path
@@ -71,17 +93,6 @@ module MyBiaDJ
         end
       end
       
-      def size(path)
-        read_file(path).size
-      end
-
-      def file?(path)
-        path == '/hello.txt'
-      end
-
-      def read_file(path)
-        "Hello, World!\n"
-      end
       
     end
     
