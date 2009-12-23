@@ -47,18 +47,23 @@ module MyBiaDJ
       @virtuals = []
 
       # connects record to virtual (self)
-      def connect!
-        record.connect_to(self)
-      end
+      # def connect!
+      #   record.connect_to(self)
+      # end
 
       # returns sanitized value
       def value(str)
         sanitize(str)
       end
 
+      def db
+        @db ||= Hash.new{|h,k| h[k] = {}}
+      end
+      
+
       # finds/creates virtual entry and yields each record
-      def db_record
-        vals = [value].flatten
+      def db_record(v = nil)
+        vals = [v || value].flatten
         vals.map do |v|
           record = MyBiaDJ::Table(:virtual).find_or_create(:name => name.to_s, :value => v)
           yield record if block_given?
@@ -94,8 +99,7 @@ module MyBiaDJ
         @virtuals << clz
       end
       
-      def initialize(record)
-        @record = record
+      def initialize
       end
 
       def sanitize(str)
@@ -138,7 +142,10 @@ module MyBiaDJ
     end
   end
 
-  [:direct, :genre, :album, :tag, :artist].each do |l|
+  # [:direct, :genre, :album, :tag, :artist].each do |l|
+  #   require "#{MyBiaDJ::Source}/lib/MyBiaDJ/virtuals/#{l}"
+  # end
+  [:album].each do |l|
     require "#{MyBiaDJ::Source}/lib/MyBiaDJ/virtuals/#{l}"
   end
 end

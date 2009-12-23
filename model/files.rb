@@ -21,6 +21,14 @@ module MyBiaDJ::Database::Tables
     def base_dir
       MyBiaDJ[:record_case]
     end
+
+
+    def children
+      DB["select files_id from files_relations where parent_id = #{self.id}"].map do |f|
+        Files[f[:files_id]]
+      end
+    end
+    
     
     def to_record
       target =

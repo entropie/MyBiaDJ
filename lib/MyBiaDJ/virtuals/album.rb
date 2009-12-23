@@ -6,19 +6,43 @@
 class MyBiaDJ::FileSystem
   class Virtual
     class Album < Virtual
-      def value
-        super(record.album)
+
+      def db
+        super[name]
       end
       
-      def link_target(target = nil)
-        album_path = ::File.join(self.class.path)
-        FileUtils.mkdir_p(album_path)
-        ::File.join(album_path, virtual_target)
+      def dispatched_content(path)
+        if path.empty?
+          conts = MyBiaDJ::Table(:virtual).filter(:name => name.to_s)
+          conts.map do |rec|
+            ret = rec[:value]
+            db[ret] = []
+            rec.files.each do |rc|
+              rc.children.each do |child|
+                db[ret] << File.basename(child[:path])
+              end
+            end
+            ret
+          end
+        else
+          db[path.to_s]
+        end
       end
 
-      def virtual_target
-        sanitize(record.name)
+      def dispatched_directory?(path)
+        return true if path.empty?
+        return false unless db[path.to_s]
+        true
       end
+      
+      def dispatched_file?(path)
+        return false if path.to_s =~ /^\./
+        if path.size == 1
+          return false
+        end
+        db[ path.first ].include?(path.last)
+      end
+
     end
   end
 end

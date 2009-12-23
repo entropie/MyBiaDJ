@@ -32,16 +32,20 @@ task :lili do
   pp f.to_record
 end
 
-class PrintChange < FSEvent
-  def on_change(directories)
-    puts "Detected change in: #{directories}"
-  end
-  
-  def start
-    puts "watching #{registered_directories.join(", ")} for changes"
-    super
-  end
+task :fuse do
+  fuse = MyBiaDJ::FileSystem::FuseMirror.new
 end
+
+# class PrintChange < FSEvent
+#   def on_change(directories)
+#     puts "Detected change in: #{directories}"
+#   end
+  
+#   def start
+#     puts "watching #{registered_directories.join(", ")} for changes"
+#     super
+#   end
+# end
 
 task :t do
   printer = PrintChange.new
